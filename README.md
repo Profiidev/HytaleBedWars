@@ -1,4 +1,4 @@
-# HytalePluginTemplate
+# HytaleBedWars
 
 A simple plugin template for Hytale server plugins.
 
