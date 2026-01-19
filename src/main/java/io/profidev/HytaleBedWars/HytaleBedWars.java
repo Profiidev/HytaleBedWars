@@ -17,5 +17,6 @@ public class HytaleBedWars extends JavaPlugin {
     @Override
     protected void setup() {
         LOGGER.atInfo().log("Hytale Plugin Template is setting up!");
+        this.getCommandRegistry().registerCommand(new TestCommand());
     }
 }
