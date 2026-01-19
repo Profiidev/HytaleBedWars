@@ -26,6 +26,7 @@ import com.hypixel.hytale.server.core.util.PrefabUtil;
 
 public class CreateCommand extends AbstractPlayerCommand {
   private static final String SPAWN_PREFAB_PATH = "Server/Prefabs/Spawn.prefab.json";
+  private static final String SIMPLE_MAP_PREFAB_PATH = "Server/Prefabs/SimpleMap.prefab.json";
 
   @Nonnull
   private final JavaPlugin plugin;
@@ -50,6 +51,7 @@ public class CreateCommand extends AbstractPlayerCommand {
 
     var config = new WorldConfig();
     config.setWorldGenProvider(new VoidWorldGenProvider());
+    config.setDeleteOnRemove(true);
 
     var path = universe.getPath().resolve("worlds").resolve(BWCommand.WORLD_NAME);
     path.toFile().mkdirs();
@@ -84,16 +86,19 @@ public class CreateCommand extends AbstractPlayerCommand {
     }
 
     var prefabPath = prefabFs.getPath(SPAWN_PREFAB_PATH);
-    if (prefabPath == null || !Files.exists(prefabPath)) {
+    var simpleMapPrefabPath = prefabFs.getPath(SIMPLE_MAP_PREFAB_PATH);
+    if (prefabPath == null || !Files.exists(prefabPath) ||
+        simpleMapPrefabPath == null || !Files.exists(simpleMapPrefabPath)) {
       NotificationUtil.sendNotification(playerRef.getPacketHandler(),
-          Message.raw("Could not find prefab at path: " + SPAWN_PREFAB_PATH));
+          Message.raw("Could not find prefab at path: " + SPAWN_PREFAB_PATH + " or " + SIMPLE_MAP_PREFAB_PATH));
       return;
     }
 
-    var prefab = PrefabLoader.loadPrefabBufferAt(prefabPath);
-    if (prefab == null) {
+    var spawnPrefab = PrefabLoader.loadPrefabBufferAt(prefabPath);
+    var simpleMapPrefab = PrefabLoader.loadPrefabBufferAt(simpleMapPrefabPath);
+    if (spawnPrefab == null || simpleMapPrefab == null) {
       NotificationUtil.sendNotification(playerRef.getPacketHandler(),
-          Message.raw("Failed to load prefab from path: " + SPAWN_PREFAB_PATH));
+          Message.raw("Failed to load prefab from path: " + SPAWN_PREFAB_PATH + " or " + SIMPLE_MAP_PREFAB_PATH));
       return;
     }
 
@@ -105,7 +110,10 @@ public class CreateCommand extends AbstractPlayerCommand {
     }
 
     world.execute(() -> {
-      PrefabUtil.paste(prefab.newAccess(), world, new Vector3i(0, 200, 0), Rotation.None, true, new Random(), bwStore);
+      PrefabUtil.paste(spawnPrefab.newAccess(), world, new Vector3i(0, 200, 0), Rotation.None, true, new Random(),
+          bwStore);
+      PrefabUtil.paste(simpleMapPrefab.newAccess(), world, new Vector3i(0, 100, 0), Rotation.None, true, new Random(),
+          bwStore);
     });
     NotificationUtil.sendNotification(playerRef.getPacketHandler(), Message.raw("BedWars world created successfully!"));
   }

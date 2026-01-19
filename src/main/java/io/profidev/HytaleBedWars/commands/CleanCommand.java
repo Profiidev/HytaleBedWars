@@ -28,6 +28,9 @@ public class CleanCommand extends AbstractPlayerCommand {
     var universe = Universe.get();
     universe.removeWorld(BWCommand.WORLD_NAME);
 
+    var path = universe.getPath().resolve("worlds").resolve(BWCommand.WORLD_NAME);
+    path.toFile().delete();
+
     NotificationUtil.sendNotification(playerRef.getPacketHandler(),
         Message.raw("BedWars world cleaned up successfully!"));
   }
