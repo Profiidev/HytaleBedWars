@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug Hytale Server",
+      "request": "launch",
+      "mainClass": "com.hypixel.hytale.Main",
+      "projectName": "HytaleBedWars",
+      "classPaths": ["${env:HOME}/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Server/HytaleServer.jar"],
+      "cwd": "${workspaceFolder}/run",
+      "vmArgs": ["-Xmx4G", "-Xms4G"],
+      "args": ["--allow-op", "--assets=~/.var/app/com.hypixel.HytaleLauncher/data/Hytale/install/release/package/game/latest/Assets.zip"],
+      "sourcePaths": ["${workspaceFolder}/src/main/java"],
+      "preLaunchTask": "gradle: deploy"
+    }
+  ]
+}

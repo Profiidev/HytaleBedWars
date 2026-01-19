@@ -17,11 +17,22 @@
         "cwd": "./run"
       },
       "problemMatcher": [],
+      "dependsOn": ["gradle: deploy"]
+    },
+    {
+      "type": "shell",
+      "label": "Gradle Deploy",
+      "command": "echo",
+      "dependsOn": ["gradle: deploy"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": ["gradle: deploy"]
+      "presentation": {
+        "reveal": "silent",
+        "revealProblems": "onProblem",
+        "close": true
+      }
     }
   ]
 }
